@@ -1,0 +1,10 @@
+{
+  "issuer": "https://oidcng.test2.surfconext.nl",
+  "user_session": "account-linking-app-guest",
+  "client_id": "account-linking-app-guest",
+  "client_secret": "secret",
+  "authorization_endpoint": "https://oidcng.test2.surfconext.nl/oidc/authorize",
+  "userinfo_endpoint": "https://oidcng.test2.surfconext.nl/oidc/userinfo",
+  "token_endpoint": "https://oidcng.test2.surfconext.nl/oidc/token",
+  "redirect_uri": "oidc_redirect_uri"
+}

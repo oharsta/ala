@@ -1,0 +1,35 @@
+body::after {
+    position: fixed;
+    top: 218px;
+    right: 196px;
+    transform: translate(50%, -50%) rotate(50deg);
+    font-size: 180px;
+    font-family: sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: rgb(236, 0, 14);
+    content: "demo";
+    pointer-events: none;
+    z-index: 9;
+}
+
+a.logout {
+    color: white !important;
+}
+
+div.eduid {
+    display: flex;
+}
+
+div.eduid span {
+    font-size: 16px;
+}
+
+div.eduid img {
+    display: inline-block;
+    margin: -6px 20px 0 0;
+}
+
+div.panel-body-no-padding {
+    padding: 0 0 30px 15px!important;
+}

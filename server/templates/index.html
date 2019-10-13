@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+{% block body_classes %}student homepage{% endblock %}
+{% block content %}
+    <div class="container" id="contentContainer">
+        <div class="row">
+            <div class="header"><h1 class="center">Welkom bij Studielink</h1></div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="row">
+                <div class="col-xs-12 col-md-4 col-lg-3 col-md-offset-2 col-lg-offset-3 extra-info">
+                    <div class="Draaicontainer">
+                        <div class="kaartje">
+                            <div class="figure front">
+                                <div class="figure-header row">
+                                    <div class="col-xs-12"><h3>Studielink is vernieuwd!</h3>
+                                        <p>Welkom bij het vernieuwde Studielink. Heb je al een account in
+                                            Studielink? Dan zal je gevraagd worden om je e-mailadres te verifiëren
+                                            als je voor het eerst inlogt. De mobiele weergave van Studielink is nog
+                                            niet optimaal, hier werken we aan.</p><br><br></div>
+                                    <a id="more_info"
+                                       href="http://info.studielink.nl/nl/studenten/Pages/default.aspx"
+                                       target="_blank" rel="noopener noreferrer">Klik hier voor meer informatie</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4 col-lg-3">
+                    <div class="Draaicontainer">
+                        <div class="kaartje">
+                            <div class="figure front">
+                                <div class="figure-header row">
+                                    <div class="col-xs-10"><h3>Mijn studielink</h3></div>
+                                    <div class="col-xs-2">
+                                        <div><span class="form-control-feedback fa col-xs-2 info"></span><span
+                                                id="tooltip-loginDigidTooltip" class="sr-only">Als je in Nederland woont, ben je verplicht om met je persoonlijke DigiD in te loggen. Woon je in het buitenland en heb je een nog werkende DigiD? Log dan ook in met DigiD.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="digid-logo">DigiD logo</div>
+                                <a id="digidLogin" href="/login"
+                                   class="btn btn-primary btn-corner push-right-sm sl-digid">Inloggen met DigiD</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"></div>
+                    <div class="Draaicontainer">
+                        <div id="card2" class="kaartje">
+                            <div class="figure front">
+                                <div class="figure-header row">
+                                    <div class="col-xs-10"><h3>Kan je geen DigiD aanvragen?</h3></div>
+                                    <div class="col-xs-2">
+                                        <div><span class="form-control-feedback fa col-xs-2 info"></span><span
+                                                id="tooltip-loginOverigTooltip" class="sr-only">DigiD staat voor Digitale Identiteit. Met een DigiD kun je inloggen op websites van de overheid, waaronder Studielink. Je kunt alleen een DigiD aanvragen als je in Nederland woont.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="flipPanel" class="btn btn-primary btn-corner push-right-sm"
+                                        type="button">Inloggen zonder DigiD
+                                </button>
+                                <div class="links"><a href="https://student.sl-cloud.nl/account/aanvragen">Studielink-account
+                                    aanmaken zonder DigiD</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row tekstVeld">
+                <div class="col-xs-12"><h2>Via Studielink regel jij je (her)inschrijving bij hogescholen en
+                    universiteiten in Nederland. Meer informatie over de aanmeldprocedure en toelatingseisen vind je
+                    op de <a
+                            href="http://info.studielink.nl/nl/studenten/overzichtonderwijsinstellingen/Pages/Default.aspx"
+                            target="_blank">website van de onderwijsinstelling</a>. <br> Meer informatie over hoe
+                    Studielink met je persoonsgegevens omgaat vind je <a
+                            href="http://info.studielink.nl/nl/studenten/Pages/actueel.aspx?pid=207"
+                            target="_blank">hier</a>.</h2></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
