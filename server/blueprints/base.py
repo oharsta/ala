@@ -1,20 +1,13 @@
 import logging
 import os
-from datetime import datetime
 from functools import wraps
 
 from flask import Blueprint, jsonify, current_app, render_template, redirect, request as current_request, session
 from werkzeug.exceptions import HTTPException, BadRequest
 
-from server.db.user import User
 from server.oidc import oidc
 
 base_blueprint = Blueprint("base_blueprint", __name__, url_prefix="/")
-
-contact_attributes = [("roepnaam", "nickname"), ("emailadres", "email"),
-                      ("telefoonnummer1_toegangscode", "phone_access_code"),
-                      ("telefoonnummer1_telefoonnummer", "phone"),
-                      ("correspondentietaal", "language")]
 
 
 def json_endpoint(f):
@@ -36,56 +29,31 @@ def json_endpoint(f):
     return json_decorator
 
 
-def check_user(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if "user" not in session:
-            user_info = oidc._retrieve_userinfo()
-            sub = oidc.user_getinfo(fields=["sub"])
-            if sub["sub"]:
-                user = User.find_by_sub(sub["sub"])
-                if not user:
-                    return redirect("/contact")
-                session["user"] = user
-            else:
-                oidc.logout()
-                return redirect("/login")
-        return f(*args, **kwargs)
-
-    return decorated
-
-
 def _template_context(additional_ctx={}):
     ctx = {"configuration": current_app.app_config}
-    if "user" in session:
-        ctx["user"] = session["user"]
+    for name in ["guest", "conext"]:
+        if name in session:
+            ctx[name] = session[name]
     return {**ctx, **additional_ctx}
 
 
 @base_blueprint.route("/", strict_slashes=False)
+@oidc.require_guest_login
 def index():
     return render_template("index.html", **_template_context())
 
 
+@base_blueprint.route("/connect", strict_slashes=False, methods=["GET"])
+@oidc.require_guest_login
+@oidc.require_conext_login
+def connect():
+    return render_template("connect.html", **_template_context())
+
+
 @base_blueprint.route("/logout", strict_slashes=False)
 def logout():
-    oidc.logout()
     session.clear()
     return redirect("/")
-
-
-@base_blueprint.route("/login", strict_slashes=False, methods=["GET"])
-@oidc.require_login
-@check_user
-def login():
-    return redirect("/overview")
-
-
-@base_blueprint.route("/overview", strict_slashes=False, methods=["GET"])
-@oidc.require_login
-@check_user
-def overview():
-    return render_template("overview.html", **_template_context())
 
 
 @base_blueprint.route("/health", strict_slashes=False)

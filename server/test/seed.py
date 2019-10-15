@@ -1,12 +1,11 @@
-import hashlib
 from uuid import uuid4
 
 from flask_pymongo import PyMongo
 
 from server.db.user import User
 
-password = "secret"
-subject_id = "john@example.org"
+eduperson_principal_name = "jdoe@example.com"
+eduperson_entitlement = str(uuid4())
 
 
 def seed(mongo: PyMongo):
@@ -14,8 +13,9 @@ def seed(mongo: PyMongo):
     for name in ["users"]:
         db[name].drop()
 
-    User.save_or_update({"sub": subject_id,
-                         "password": hashlib.sha256(password.encode()).hexdigest(),
+    User.save_or_update({"eduperson_principal_name": eduperson_principal_name,
                          "name": "John Doe",
+                         "eduperson_entitlement": eduperson_entitlement,
                          "email": "john.doe@example.org",
-                         "bsn": str(uuid4())})
+                         "edumember_is_member_of": ["urn:collab:org:surf.nl",
+                                                    "urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:"]})

@@ -1,35 +1,94 @@
-body::after {
-    position: fixed;
-    top: 218px;
-    right: 196px;
-    transform: translate(50%, -50%) rotate(50deg);
-    font-size: 180px;
-    font-family: sans-serif;
-    text-transform: uppercase;
-    font-weight: bold;
-    color: rgb(236, 0, 14);
-    content: "demo";
-    pointer-events: none;
-    z-index: 9;
-}
-
-a.logout {
-    color: white !important;
-}
-
-div.eduid {
-    display: flex;
-}
-
-div.eduid span {
+html {
+    box-sizing: border-box;
     font-size: 16px;
 }
 
-div.eduid img {
-    display: inline-block;
-    margin: -6px 20px 0 0;
+*, *:before, *:after {
+    box-sizing: inherit;
 }
 
-div.panel-body-no-padding {
-    padding: 0 0 30px 15px!important;
+body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
+}
+
+div.container {
+    padding: 0 calc(50vw - 512px);
+}
+
+header {
+    display: flex;
+    background-color: white;
+    border-bottom: 3px solid #e1e0e5;
+    padding: 14px calc(50vw - 512px);
+}
+
+img.edubadges {
+    max-width: 48px;
+}
+
+div.title {
+    background-color: #f7f7f7;
+    padding: 44px;
+}
+
+div.title h1 {
+    font-size: 42px;
+    font-weight: bold;
+    line-height: 64px;
+}
+.center {
+    color: rgb(5, 1, 44);
+    text-align: center;
+}
+.sub-container {
+    padding: 32px
+}
+.footer {
+    padding: 32px 0;
+    border-top: 1px solid #e1e0e5;
+    color: #6c6b80;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.footer ul {
+    display: flex;
+    line-height: 1;
+    margin: 0 0 16px 0;
+    list-style: none;
+    margin-block-start: 0;
+    padding-inline-start: 0;
+}
+
+.footer ul > *:not(:last-child) {
+    margin-right: 8px;
+    padding-right: 8px;
+    position: relative;
+}
+
+.footer ul > *:not(:last-child)::after {
+    background-color: #a09eaf;
+    content: '';
+    display: block;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 1px;
+}
+
+.footer a, .footer a:visited {
+    color: #6c6b80;
+
 }

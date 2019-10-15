@@ -10,12 +10,23 @@ class User:
         return str(uuid4())
 
     @staticmethod
-    def find_by_sub(sub):
-        return current_app.mongo.db.users.find_one({"sub": sub})
+    def find_by_eduperson_principal_name(eduperson_principal_name):
+        return current_app.mongo.db.users.find_one({"eduperson_principal_name": eduperson_principal_name})
 
     @staticmethod
     def save_or_update(model, _id=None):
+        users = current_app.mongo.db.users
         if "_id" in model:
-            return current_app.mongo.db.users.update_one({"_id": model["_id"]}, {"$set": model})
-        model["_id"] = _id if _id else str(User.generate_id())
-        return current_app.mongo.db.users.insert_one(model)
+            users.update_one({"_id": model["_id"]}, {"$set": model})
+        else:
+            model["_id"] = _id if _id else str(User.generate_id())
+            users.insert_one(model)
+        return users.find_one({"_id": model["_id"]})
+
+    @staticmethod
+    def provision(eduperson_principal_name):
+        user = User.find_by_eduperson_principal_name(eduperson_principal_name)
+        return user if user is not None else User.save_or_update({
+            "eduperson_principal_name": eduperson_principal_name,
+            "eduperson_entitlement": "urn:mace:eduid.nl:institution-verified"
+        })

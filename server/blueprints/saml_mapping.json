@@ -1,0 +1,70 @@
+{
+  "sub": {
+    "saml": "urn:mace:dir:attribute-def:eduPersonTargetedID",
+    "override": false
+  },
+  "name": {
+    "saml": "urn:mace:dir:attribute-def:cn",
+    "override": true
+  },
+  "preferred_username": {
+    "saml": "urn:mace:dir:attribute-def:displayName",
+    "override": true
+  },
+  "nickname": {
+    "saml": "urn:mace:dir:attribute-def:displayName",
+    "override": true
+  },
+  "given_name": {
+    "saml": "urn:mace:dir:attribute-def:givenName",
+    "override": true
+  },
+  "family_name": {
+    "saml": "urn:mace:dir:attribute-def:sn",
+    "override": true
+  },
+  "email": {
+    "saml": "urn:mace:dir:attribute-def:mail",
+    "override": false
+  },
+  "schac_home_organization": {
+    "saml": "urn:mace:terena.org:attribute-def:schacHomeOrganization",
+    "override": false
+  },
+  "schac_home_organization_type": {
+    "saml": "urn:mace:terena.org:attribute-def:schacHomeOrganizationType",
+    "override": false
+  },
+  "eduperson_affiliation": {
+    "saml": "urn:mace:dir:attribute-def:eduPersonAffiliation",
+    "override": false
+  },
+  "eduperson_scoped_affiliation": {
+    "saml": "urn:mace:dir:attribute-def:eduPersonScopedAffiliation",
+    "override": false
+  },
+  "edumember_is_member_of": {
+    "saml": "urn:mace:dir:attribute-def:isMemberOf",
+    "override": false
+  },
+  "eduperson_entitlement": {
+    "saml": "urn:mace:dir:attribute-def:eduPersonEntitlement",
+    "override": true
+  },
+  "eduperson_unique_id": {
+    "saml": "urn:mace:dir:attribute-def:eduPersonUniqueId",
+    "override": true
+  },
+  "schac_personal_unique_code": {
+    "saml": "urn:schac:attribute-def:schacPersonalUniqueCode",
+    "override": false
+  },
+  "eduperson_principal_name": {
+    "saml": "urn:mace:dir:attribute-def:eduPersonPrincipalName",
+    "override": false
+  },
+  "uids": {
+    "saml": "urn:mace:dir:attribute-def:uid",
+    "override": false
+  }
+}

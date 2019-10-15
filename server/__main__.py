@@ -8,10 +8,11 @@ from flask import Flask, jsonify, request as current_request
 from flask_pymongo import PyMongo
 from munch import munchify
 
+from server.blueprints.attribute_aggregation import attribute_aggregation_blueprint
 from server.blueprints.base import base_blueprint
 from server.db.custom_migration_manager import CustomMigrationManager
-
 from server.oidc import configure_oidc
+from server.security import configure_basic_auth
 
 
 def read_file(file_name):
@@ -58,27 +59,23 @@ app.secret_key = config.secret_key
 
 app.config.update({
     "TESTING": test,
-
-    "OIDC_CLIENT_SECRETS": f"{os.path.dirname(os.path.realpath(__file__))}/config/{config.client_secret_file_location}",
-    "OIDC_ID_TOKEN_COOKIE_SECURE": False,
-    "OIDC_REQUIRE_VERIFIED_EMAIL": False,
-    "OIDC_USER_INFO_ENABLED": True,
-    "OIDC_SCOPES": ["openid"],
-
     "MONGO_URI": config.database.uri,
-
     "LOCAL": is_local,
     "PROFILE": profile,
-    "MOCK_EDUID": os.environ.get("MOCK_EDUID")
+    "BASIC_AUTH_USERNAME": config.aa.user,
+    "BASIC_AUTH_PASSWORD": config.aa.password
 })
-app.app_config = config
-app.app_config["PROFILE"] = profile
 
-configure_oidc(app, f"{os.path.dirname(os.path.realpath(__file__))}/config/open_conext_oidc.json")
+app.app_config = config
+
+configure_oidc(app, f"{os.path.dirname(os.path.realpath(__file__))}/config/idp_oidc.json")
+
+configure_basic_auth(app)
 
 app.mongo = PyMongo(app)
 
 app.register_blueprint(base_blueprint)
+app.register_blueprint(attribute_aggregation_blueprint)
 
 app.register_error_handler(404, page_not_found)
 

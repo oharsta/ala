@@ -2,42 +2,26 @@
 <html lang="nl">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Studielink</title>
+    <title>Account Linking App</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link href="/static/studielink/main.c91ad456.css" rel="stylesheet">
     <link href="/static/custom.css" rel="stylesheet">
-    <meta name="application-version" content="1.108.17.1162">
 </head>
-<title></title>
-<body class="student {% block body_classes %}Your template must define a 'body_classes' block{% endblock %}  ">
-{% if "user" in session %}
-<div id="topBar">
-    <ul class="navbar-nav">
-        <li><button>{{ session.user.name }}</button></li>
-        <li>
-            <button id="btnLogOut">
-                <span class="fa fa-close" aria-hidden="true"></span><a class="btn logout" href="/logout"> Uitloggen</a>
-            </button>
-        </li>
-    </ul>
-</div>
-{% endif %}
-<div id="content">
-    <div>
-        <div id="navigatie">
-            <nav class="navbar navbar-default">
-                <div class="navbar-header"><a class="navbar-brand" href="https://student.sl-cloud.nl/">logo
-                    Studielink</a></div>
-            </nav>
-        </div>
-        {% block content %}
-            Your template must define a 'content' block.
-        {% endblock %}
+<body>
+<header>
+    <img class="edubadges" src="/static/edubadges.png">
+</header>
+<div class="container">
+
+    {% block content %}
+        Your template must define a 'content' block.
+    {% endblock %}
+    <div class="footer">
+        <ul>
+            <li>Powered by <a href="https://www.surf.nl">Surf</a></li>
+            <li><a target="_blank" href="/public/privacy-policy">Privacy statement</a></li>
+        </ul>
     </div>
 </div>
-<div id="modalcontainer"></div>
-<script type="text/javascript" src="/static/studielink/main.2b0e833f.js"></script>
-<div id="srText-loading" class="sr-only" aria-live="polite" aria-atomic="true">de applicatie is klaar met laden</div>
 </body>
 </html>
