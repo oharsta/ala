@@ -2,12 +2,17 @@ import logging
 import os
 from functools import wraps
 
-from flask import Blueprint, jsonify, current_app, render_template, redirect, request as current_request, session
+from flask import Blueprint, jsonify, current_app, render_template, redirect, session, \
+    request
 from werkzeug.exceptions import HTTPException, BadRequest
 
+from server.db.user import User
 from server.oidc import oidc
 
 base_blueprint = Blueprint("base_blueprint", __name__, url_prefix="/")
+
+protected_properties = ["eduperson_principal_name", "eduperson_entitlement", "eduperson_unique_id_per_sp",
+                        "eduperson_unique_id"]
 
 
 def json_endpoint(f):
@@ -29,38 +34,63 @@ def json_endpoint(f):
     return json_decorator
 
 
-def _template_context(additional_ctx={}):
-    ctx = {"configuration": current_app.app_config}
-    for name in ["guest", "conext"]:
-        if name in session:
-            ctx[name] = session[name]
-    return {**ctx, **additional_ctx}
-
-
 @base_blueprint.route("/", strict_slashes=False)
-@oidc.require_guest_login
 def index():
-    return render_template("index.html", **_template_context())
+    redirect_uri = request.args.get("redirect_uri")
+    if not redirect_uri:
+        return render_template("error.html", **{"error": "No redirect_uri was provided."})
+
+    profile = request.args.get("profile", "edubadges")
+    if profile not in current_app.app_config.profile:
+        return render_template("error.html", **{"error": f"Unknown profile '{profile}'."})
+
+    session["redirect_uri"] = redirect_uri
+    session["profile"] = profile
+    return redirect("/login")
 
 
-@base_blueprint.route("/connect", strict_slashes=False, methods=["GET"])
+@base_blueprint.route("/login", strict_slashes=False)
+@oidc.require_guest_login
+def login():
+    return redirect("/connect")
+
+
+@base_blueprint.route("/connect", strict_slashes=False)
 @oidc.require_guest_login
 @oidc.require_conext_login
 def connect():
-    return render_template("connect.html", **_template_context())
+    conext = session["conext"]
+    guest = session["guest"]
 
+    required_attributes = current_app.app_config.profile[session["profile"]].required_attributes
+    missing_attributes = [k for k in required_attributes if k not in conext]
 
-@base_blueprint.route("/logout", strict_slashes=False)
-def logout():
-    session.clear()
-    return redirect("/")
+    if len(missing_attributes) > 0:
+        return render_template("error.html",
+                               **{"error": f"Your institution has not provided all the required attributes. Missing "
+                                           f"attributes: '{','.join(missing_attributes)}'."})
+
+    if "eduperson_principal_name" not in guest:
+        raise BadRequest(f"Guest user {guest} did not provide 'eduperson_principal_name' attribute")
+
+    user = User.find_by_eduperson_principal_name(guest["eduperson_principal_name"])
+    if not user:
+        raise BadRequest(f"User {guest['eduperson_principal_name']} does not exist")
+
+    user["eduperson_entitlement"] = "urn:mace:eduid.nl:institution-verified"
+    # Copy all attributes from conext to the user - ARP values will filter upstream
+    for k, v in conext.items():
+        if k not in protected_properties:
+            user[k] = v
+
+    User.save_or_update(user)
+
+    return redirect(session["redirect_uri"])
 
 
 @base_blueprint.route("/health", strict_slashes=False)
 @json_endpoint
 def health():
-    if "error" in current_request.args:
-        raise BadRequest()
     return {"status": "UP"}, 200
 
 

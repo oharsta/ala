@@ -68,7 +68,7 @@ app.config.update({
 
 app.app_config = config
 
-configure_oidc(app, f"{os.path.dirname(os.path.realpath(__file__))}/config/idp_oidc.json")
+configure_oidc(app, f"{os.path.dirname(os.path.realpath(__file__))}/config/{config.idp_oidc_json}")
 
 configure_basic_auth(app)
 

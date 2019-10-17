@@ -1,0 +1,15 @@
+{
+  "issuer": "http://localhost:8081",
+  "authorization_endpoint": "http://localhost:8081/oidc/authorize",
+  "userinfo_endpoint": "http://localhost:8081/oidc/userinfo",
+  "token_endpoint": "http://localhost:8081/oidc/token",
+  "redirect_uri": "http://localhost:8083/oidc_callback",
+  "guest": {
+    "client_id": "account-linking-app-guest",
+    "client_secret": "secret"
+  },
+  "conext": {
+    "client_id": "account-linking-app",
+    "client_secret": "secret"
+  }
+}

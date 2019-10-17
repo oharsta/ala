@@ -22,11 +22,3 @@ class User:
             model["_id"] = _id if _id else str(User.generate_id())
             users.insert_one(model)
         return users.find_one({"_id": model["_id"]})
-
-    @staticmethod
-    def provision(eduperson_principal_name):
-        user = User.find_by_eduperson_principal_name(eduperson_principal_name)
-        return user if user is not None else User.save_or_update({
-            "eduperson_principal_name": eduperson_principal_name,
-            "eduperson_entitlement": "urn:mace:eduid.nl:institution-verified"
-        })

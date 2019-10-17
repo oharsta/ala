@@ -3,6 +3,17 @@ database:
 
 secret_key: secret
 
+idp_oidc_json: idp_oidc_test.json
+
 aa:
   user: admin
   password: secret
+
+profile:
+  edubadges:
+    required_attributes:
+      - given_name
+      - family_name
+  test:
+    required_attributes:
+      - nope

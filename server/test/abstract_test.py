@@ -37,9 +37,9 @@ class AbstractTest(TestCase):
             self.assertEqual(response_status_code, response.status_code, msg=str(response.json))
             return response.json if response.is_json else response.data.decode()
 
-    def post(self, url, body={}, response_status_code=201, content_type="application/json"):
+    def post(self, url, body={}, headers={}, response_status_code=201, content_type="application/json"):
         with requests.Session():
             response = self.client.post(url, data=json.dumps(body) if content_type == "application/json" else body,
-                                        content_type=content_type)
+                                        content_type=content_type, headers=headers)
             self.assertEqual(response_status_code, response.status_code, msg=str(response.json))
             return response

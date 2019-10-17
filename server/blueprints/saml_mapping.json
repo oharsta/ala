@@ -1,70 +1,53 @@
 {
   "sub": {
-    "saml": "urn:mace:dir:attribute-def:eduPersonTargetedID",
-    "override": false
+    "saml": "urn:mace:dir:attribute-def:eduPersonTargetedID"
   },
   "name": {
-    "saml": "urn:mace:dir:attribute-def:cn",
-    "override": true
+    "saml": "urn:mace:dir:attribute-def:cn"
   },
   "preferred_username": {
-    "saml": "urn:mace:dir:attribute-def:displayName",
-    "override": true
+    "saml": "urn:mace:dir:attribute-def:displayName"
   },
   "nickname": {
-    "saml": "urn:mace:dir:attribute-def:displayName",
-    "override": true
+    "saml": "urn:mace:dir:attribute-def:displayName"
   },
   "given_name": {
-    "saml": "urn:mace:dir:attribute-def:givenName",
-    "override": true
+    "saml": "urn:mace:dir:attribute-def:givenName"
   },
   "family_name": {
-    "saml": "urn:mace:dir:attribute-def:sn",
-    "override": true
+    "saml": "urn:mace:dir:attribute-def:sn"
   },
   "email": {
-    "saml": "urn:mace:dir:attribute-def:mail",
-    "override": false
+    "saml": "urn:mace:dir:attribute-def:mail"
   },
   "schac_home_organization": {
-    "saml": "urn:mace:terena.org:attribute-def:schacHomeOrganization",
-    "override": false
+    "saml": "urn:mace:terena.org:attribute-def:schacHomeOrganization"
   },
   "schac_home_organization_type": {
-    "saml": "urn:mace:terena.org:attribute-def:schacHomeOrganizationType",
-    "override": false
+    "saml": "urn:mace:terena.org:attribute-def:schacHomeOrganizationType"
   },
   "eduperson_affiliation": {
-    "saml": "urn:mace:dir:attribute-def:eduPersonAffiliation",
-    "override": false
+    "saml": "urn:mace:dir:attribute-def:eduPersonAffiliation"
   },
   "eduperson_scoped_affiliation": {
-    "saml": "urn:mace:dir:attribute-def:eduPersonScopedAffiliation",
-    "override": false
+    "saml": "urn:mace:dir:attribute-def:eduPersonScopedAffiliation"
   },
   "edumember_is_member_of": {
-    "saml": "urn:mace:dir:attribute-def:isMemberOf",
-    "override": false
+    "saml": "urn:mace:dir:attribute-def:isMemberOf"
   },
   "eduperson_entitlement": {
-    "saml": "urn:mace:dir:attribute-def:eduPersonEntitlement",
-    "override": true
+    "saml": "urn:mace:dir:attribute-def:eduPersonEntitlement"
   },
   "eduperson_unique_id": {
-    "saml": "urn:mace:dir:attribute-def:eduPersonUniqueId",
-    "override": true
+    "saml": "urn:mace:dir:attribute-def:eduPersonUniqueId"
   },
   "schac_personal_unique_code": {
-    "saml": "urn:schac:attribute-def:schacPersonalUniqueCode",
-    "override": false
+    "saml": "urn:schac:attribute-def:schacPersonalUniqueCode"
   },
   "eduperson_principal_name": {
-    "saml": "urn:mace:dir:attribute-def:eduPersonPrincipalName",
-    "override": false
+    "saml": "urn:mace:dir:attribute-def:eduPersonPrincipalName"
   },
   "uids": {
-    "saml": "urn:mace:dir:attribute-def:uid",
-    "override": false
+    "saml": "urn:mace:dir:attribute-def:uid"
   }
 }
