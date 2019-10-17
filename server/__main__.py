@@ -10,6 +10,7 @@ from munch import munchify
 
 from server.blueprints.attribute_aggregation import attribute_aggregation_blueprint
 from server.blueprints.base import base_blueprint
+from server.cron import init_scheduling
 from server.db.custom_migration_manager import CustomMigrationManager
 from server.oidc import configure_oidc
 from server.security import configure_basic_auth
@@ -83,6 +84,8 @@ migrations_path = f"{os.path.dirname(os.path.realpath(__file__))}/migrations"
 ini_file = os.environ.get("MIGRATIONS", "config.ini")
 manager = CustomMigrationManager(migrations_path, ini_file)
 manager.run()
+
+init_scheduling()
 
 # WSGI production mode dictates that no flask app is actually running
 if is_local:

@@ -23,3 +23,9 @@ To run all tests in a submodule:
 ```
 python -m pytest --cov=server --cov-report html:htmlcov server/test
 ```
+
+#### [Testing with curl](#testing)
+To mimic attribute aggregation
+```
+curl -G --user admin:secret 'http://localhost:8083/attribute_aggregation' --data-urlencode "eduperson_principal_name=j.doe@example.com" --data-urlencode "sp_entity_id=https://nope" | jq
+```
