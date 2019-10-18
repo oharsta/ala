@@ -1,7 +1,7 @@
 import json
 from urllib import parse
 from uuid import uuid4
-
+from datetime import datetime
 import httpretty
 import requests
 
@@ -21,6 +21,7 @@ class TestScenario(AbstractTest):
         self.assertEqual("Doe", user["family_name"])
         self.assertEqual("Mary", user["given_name"])
         self.assertListEqual(["group1", "group2"], user["edumember_is_member_of"])
+        self.assertTrue(datetime.now() < user["expiry_date"])
 
     @httpretty.activate
     def test_entire_flow_missing_attributes(self):

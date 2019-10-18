@@ -1,19 +1,33 @@
-import schedule
-import time
 import threading
+import time
+from datetime import datetime
+
+import schedule
+from flask import current_app
+
+from server.db.user import User
+
+preserved_attribute_names = ["eduperson_entitlement", "eduperson_principal_name", "eduperson_unique_id_per_sp"]
 
 
-def clean_users():
-    print('TODO : Cleaning users')
+def clean_users(app):
+    with app.app_context():
+        users = User.find_by_expiry_date(datetime.now())
+        coll = current_app.mongo.db.users
+        for user in users:
+            model = {name: user[name] for name in preserved_attribute_names if name in user}
+            coll.replace_one({"_id": user["_id"]}, model)
 
 
-def init_scheduling():
-    def run():
-        schedule.every(5).seconds.do(clean_users)
-        while True:
-            schedule.run_pending()
-            time.sleep(1)
+# def init_scheduling(app, active, every_seconds=130 * 60, sleep_time=5 * 60):
+def init_scheduling(app, active, every_seconds=1, sleep_time=1):
+    if active:
+        def run():
+            schedule.every(every_seconds).seconds.do(clean_users, app=app)
+            while True:
+                schedule.run_pending()
+                time.sleep(sleep_time)
 
-    thread = threading.Thread(target=run, args=())
-    thread.daemon = True
-    thread.start()
+        thread = threading.Thread(target=run, args=())
+        thread.daemon = True
+        thread.start()

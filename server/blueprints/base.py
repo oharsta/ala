@@ -1,7 +1,7 @@
 import logging
 import os
 from functools import wraps
-
+from datetime import datetime, timedelta
 from flask import Blueprint, jsonify, current_app, render_template, redirect, session, \
     request
 from werkzeug.exceptions import HTTPException, BadRequest
@@ -78,6 +78,7 @@ def connect():
         raise BadRequest(f"User {guest['eduperson_principal_name']} does not exist")
 
     user["eduperson_entitlement"] = "urn:mace:eduid.nl:entitlement:verified-by-institution"
+    user["expiry_date"] = datetime.now() + timedelta(minutes=30)
     # Copy all attributes from conext to the user - ARP values will filter upstream
     for k, v in conext.items():
         if k not in protected_properties:
