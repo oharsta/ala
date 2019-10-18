@@ -12,7 +12,7 @@ from server.oidc import oidc
 base_blueprint = Blueprint("base_blueprint", __name__, url_prefix="/")
 
 protected_properties = ["eduperson_principal_name", "eduperson_entitlement", "eduperson_unique_id_per_sp",
-                        "eduperson_unique_id"]
+                        "eduid"]
 
 
 def json_endpoint(f):
@@ -77,7 +77,7 @@ def connect():
     if not user:
         raise BadRequest(f"User {guest['eduperson_principal_name']} does not exist")
 
-    user["eduperson_entitlement"] = "urn:mace:eduid.nl:institution-verified"
+    user["eduperson_entitlement"] = "urn:mace:eduid.nl:entitlement:verified-by-institution"
     # Copy all attributes from conext to the user - ARP values will filter upstream
     for k, v in conext.items():
         if k not in protected_properties:

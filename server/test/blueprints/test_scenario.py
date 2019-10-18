@@ -17,7 +17,7 @@ class TestScenario(AbstractTest):
         self._login()
 
         user = User.find_by_eduperson_principal_name(mary_eduperson_principal_name)
-        self.assertEqual("urn:mace:eduid.nl:institution-verified", user["eduperson_entitlement"])
+        self.assertEqual("urn:mace:eduid.nl:entitlement:verified-by-institution", user["eduperson_entitlement"])
         self.assertEqual("Doe", user["family_name"])
         self.assertEqual("Mary", user["given_name"])
         self.assertListEqual(["group1", "group2"], user["edumember_is_member_of"])

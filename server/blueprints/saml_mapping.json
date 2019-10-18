@@ -38,8 +38,8 @@
   "eduperson_entitlement": {
     "saml": "urn:mace:dir:attribute-def:eduPersonEntitlement"
   },
-  "eduperson_unique_id": {
-    "saml": "urn:mace:dir:attribute-def:eduPersonUniqueId"
+  "eduid": {
+    "saml": "urn:mace:eduid.nl:1.1"
   },
   "schac_personal_unique_code": {
     "saml": "urn:schac:attribute-def:schacPersonalUniqueCode"

@@ -38,19 +38,19 @@ def attribute_aggregation():
     if not user:
         User.save_or_update({
             "eduperson_principal_name": eduperson_principal_name,
-            "eduperson_unique_id_per_sp": {service_provider["_id"]: f"urn:mace:eduid.nl:2.0:{str(uuid4())}"}
+            "eduperson_unique_id_per_sp": {service_provider["_id"]: str(uuid4())}
         })
         user = User.find_by_eduperson_principal_name(eduperson_principal_name)
     else:
         eduperson_unique_id_per_sp = user["eduperson_unique_id_per_sp"]
         if service_provider["_id"] not in eduperson_unique_id_per_sp:
-            eduperson_unique_id_per_sp[service_provider["_id"]] = f"urn:mace:eduid.nl:2.0:{str(uuid4())}"
+            eduperson_unique_id_per_sp[service_provider["_id"]] = str(uuid4())
             User.save_or_update(user)
 
     res = []
     for k, v in user.items():
         if k == "eduperson_unique_id_per_sp":
-            res.append({"name": saml_mapping["eduperson_unique_id"]["saml"],
+            res.append({"name": saml_mapping["eduid"]["saml"],
                         "values": [v[service_provider["_id"]]]})
         elif k in saml_mapping:
             res.append({"name": saml_mapping[k]["saml"], "values": v if isinstance(v, list) else [v]})

@@ -21,9 +21,9 @@ class TestAttributeAggregation(AbstractTest):
         self.assertListEqual(["nope"], eppn["values"])
 
         epui = res[1]
-        self.assertEqual(epui["name"], "urn:mace:dir:attribute-def:eduPersonUniqueId")
+        self.assertEqual(epui["name"], "urn:mace:eduid.nl:1.1")
         self.assertEqual(1, len(epui["values"]))
-        self.assertTrue(epui["values"][0].startswith("urn:mace:eduid.nl:2.0:"))
+        self.assertEqual(36, len(epui["values"][0]))
 
     def test_attribute_aggregation_existent_user(self):
         res = self.get("/attribute_aggregation",
@@ -34,8 +34,8 @@ class TestAttributeAggregation(AbstractTest):
             [{"name": "urn:mace:dir:attribute-def:eduPersonPrincipalName", "values": ["john@example.com"]},
              {"name": "urn:mace:dir:attribute-def:cn", "values": ["John Doe"]},
              {"name": "urn:mace:dir:attribute-def:eduPersonEntitlement",
-              "values": ["urn:mace:eduid.nl:institution-verified"]},
-             {"name": "urn:mace:dir:attribute-def:eduPersonUniqueId",
+              "values": ["urn:mace:eduid.nl:entitlement:verified-by-institution"]},
+             {"name": "urn:mace:eduid.nl:1.1",
               "values": [john_edu_unique_id]},
              {"name": "urn:mace:dir:attribute-def:mail", "values": ["john.doe@example.org"]},
              {"name": "urn:mace:dir:attribute-def:isMemberOf",

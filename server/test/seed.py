@@ -6,10 +6,10 @@ from server.db.service_provider import ServiceProvider
 from server.db.user import User
 
 john_eduperson_principal_name = "john@example.com"
-john_edu_unique_id = f"urn:mace:eduid.nl:2.0:{str(uuid4())}"
+john_edu_unique_id = str(uuid4())
 
 mary_eduperson_principal_name = "mary@example.com"
-mary_edu_unique_id = f"urn:mace:eduid.nl:2.0:{str(uuid4())}"
+mary_edu_unique_id = str(uuid4())
 
 sp_entity_id = "http://mock-sp"
 
@@ -24,7 +24,7 @@ def seed(mongo: PyMongo):
 
     User.save_or_update({"eduperson_principal_name": john_eduperson_principal_name,
                          "name": "John Doe",
-                         "eduperson_entitlement": "urn:mace:eduid.nl:institution-verified",
+                         "eduperson_entitlement": "urn:mace:eduid.nl:entitlement:verified-by-institution",
                          "eduperson_unique_id_per_sp": {service_provider["_id"]: john_edu_unique_id},
                          "email": "john.doe@example.org",
                          "edumember_is_member_of": ["urn:collab:org:surf.nl",
