@@ -85,6 +85,9 @@ def connect():
         if k not in protected_properties:
             user[k] = v
 
+    logger = logging.getLogger("main")
+    logger.info(f"Marking User {guest['eduperson_principal_name']} as verified-by-institution")
+
     User.save_or_update(user)
 
     return redirect(session["redirect_uri"])

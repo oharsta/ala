@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import urllib.parse
 from uuid import uuid4
@@ -43,17 +44,22 @@ def attribute_aggregation():
     service_provider = ServiceProvider.find_or_insert_by_entity_id(sp_entity_id)
     saml_mapping = _saml_mapping()
 
+    logger = logging.getLogger("main")
     user = User.find_by_eduperson_principal_name(eduperson_principal_name)
+
     if not user:
         User.save_or_update({
             "eduperson_principal_name": eduperson_principal_name,
             "eduperson_unique_id_per_sp": {service_provider["_id"]: str(uuid4())}
         })
+        logger.info(f"Provisioning new User {eduperson_principal_name}")
+
         user = User.find_by_eduperson_principal_name(eduperson_principal_name)
     else:
         eduperson_unique_id_per_sp = user["eduperson_unique_id_per_sp"]
         if service_provider["_id"] not in eduperson_unique_id_per_sp:
             eduperson_unique_id_per_sp[service_provider["_id"]] = str(uuid4())
+            logger.info(f"Updating existing User {eduperson_principal_name}")
             User.save_or_update(user)
 
     res = []
