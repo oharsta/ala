@@ -1,5 +1,6 @@
 import json
 import os
+import urllib.parse
 from uuid import uuid4
 
 from flask import Blueprint, request as current_request, current_app
@@ -36,8 +37,8 @@ def _basic_auth():
 def attribute_aggregation():
     _basic_auth()
     # Fail fast if required attributes are missing
-    eduperson_principal_name = current_request.args["eduperson_principal_name"]
-    sp_entity_id = current_request.args["sp_entity_id"]
+    eduperson_principal_name = urllib.parse.unquote(current_request.args["eduperson_principal_name"])
+    sp_entity_id = urllib.parse.unquote(current_request.args["sp_entity_id"])
 
     service_provider = ServiceProvider.find_or_insert_by_entity_id(sp_entity_id)
     saml_mapping = _saml_mapping()
