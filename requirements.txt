@@ -7,5 +7,4 @@ mongodb-migrations==0.6.3
 flask_jsontools==0.1.5
 flask-mail==0.9.1
 uWSGI==2.0.18
-Flask-BasicAuth==0.2.0
 schedule==0.6.0

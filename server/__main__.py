@@ -62,9 +62,7 @@ app.config.update({
     "TESTING": test,
     "MONGO_URI": config.database.uri,
     "LOCAL": is_local,
-    "PROFILE": profile,
-    "BASIC_AUTH_USERNAME": config.aa.user,
-    "BASIC_AUTH_PASSWORD": config.aa.password
+    "PROFILE": profile
 })
 
 app.app_config = config

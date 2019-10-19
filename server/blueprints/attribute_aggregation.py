@@ -1,12 +1,13 @@
 import json
 import os
 from uuid import uuid4
-from flask import Blueprint, request as current_request
+
+from flask import Blueprint, request as current_request, current_app
+from werkzeug.exceptions import Forbidden
 
 from server.blueprints.base import json_endpoint
 from server.db.service_provider import ServiceProvider
 from server.db.user import User
-from server.security import basic_auth
 
 attribute_aggregation_blueprint = Blueprint("attribute_aggregation_blueprint", __name__,
                                             url_prefix="/attribute_aggregation")
@@ -23,10 +24,17 @@ def _saml_mapping():
     return oidc_saml_mapping
 
 
+def _basic_auth():
+    config = current_app.app_config
+    auth = current_request.authorization
+    if not auth or auth.type.lower() != "basic" or config.aa.user != auth.username or config.aa.password != auth.password:
+        raise Forbidden()
+
+
 @attribute_aggregation_blueprint.route("/", strict_slashes=False)
 @json_endpoint
-@basic_auth.required
 def attribute_aggregation():
+    _basic_auth()
     # Fail fast if required attributes are missing
     eduperson_principal_name = current_request.args["eduperson_principal_name"]
     sp_entity_id = current_request.args["sp_entity_id"]

@@ -9,6 +9,12 @@ BASIC_AUTH_HEADER = {"Authorization": f"Basic {b64encode(b'admin:secret').decode
 
 class TestAttributeAggregation(AbstractTest):
 
+    def test_attribute_aggregation_forbidden(self):
+        self.get("/attribute_aggregation",
+                 query_data={"eduperson_principal_name": "nope", "sp_entity_id": "https://new-sp"},
+                 response_status_code=403,
+                 headers={"Authorization": f"Basic {b64encode(b'admin:nope').decode('ascii')}"})
+
     def test_attribute_aggregation_not_existent_user(self):
         res = self.get("/attribute_aggregation",
                        query_data={"eduperson_principal_name": "nope", "sp_entity_id": "https://new-sp"},
