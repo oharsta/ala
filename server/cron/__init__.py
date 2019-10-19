@@ -19,7 +19,7 @@ def clean_users(app):
             coll.replace_one({"_id": user["_id"]}, model)
 
 
-def init_scheduling(app, active, every_seconds=130 * 60, sleep_time=5 * 60):
+def init_scheduling(app, active, every_seconds=30 * 60, sleep_time=5 * 60):
     if active:
         def run():
             schedule.every(every_seconds).seconds.do(clean_users, app=app)

@@ -17,3 +17,8 @@ profile:
   test:
     required_attributes:
       - nope
+
+cron:
+  expiry_duration_seconds: 1800
+  interval_seconds: 1
+  sleep_time: 1

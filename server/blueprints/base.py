@@ -78,7 +78,8 @@ def connect():
         raise BadRequest(f"User {guest['eduperson_principal_name']} does not exist")
 
     user["eduperson_entitlement"] = "urn:mace:eduid.nl:entitlement:verified-by-institution"
-    user["expiry_date"] = datetime.now() + timedelta(minutes=30)
+    expiry_seconds = current_app.app_config.cron.expiry_duration_seconds
+    user["expiry_date"] = datetime.now() + timedelta(seconds=expiry_seconds)
     # Copy all attributes from conext to the user - ARP values will filter upstream
     for k, v in conext.items():
         if k not in protected_properties:

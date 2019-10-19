@@ -14,3 +14,8 @@ profile:
     required_attributes:
       - given_name
       - family_name
+
+cron:
+  expiry_duration_seconds: 1800
+  interval_seconds: 1800
+  sleep_time: 300

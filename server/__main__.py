@@ -85,7 +85,7 @@ ini_file = os.environ.get("MIGRATIONS", "config.ini")
 manager = CustomMigrationManager(migrations_path, ini_file)
 manager.run()
 
-init_scheduling(app, not is_test)
+init_scheduling(app, not is_test, config.cron.interval_seconds, config.cron.sleep_time)
 
 # WSGI production mode dictates that no flask app is actually running
 if is_local:
