@@ -1,5 +1,5 @@
 database:
-  uri: "mongodb://localhost:27017/ala"
+  uri: "mongodb://localhost:27017/ala_test"
 
 secret_key: secret
 
