@@ -65,8 +65,10 @@ def attribute_aggregation():
     res = []
     for k, v in user.items():
         if k == "eduperson_unique_id_per_sp":
+            eduid_for_sp = v[service_provider["_id"]]
             res.append({"name": saml_mapping["eduid"]["saml"],
-                        "values": [v[service_provider["_id"]]]})
+                        "values": [eduid_for_sp]})
+            logger.info(f"Returning eduid {eduid_for_sp} for User {eduperson_principal_name} and SP {sp_entity_id}")
         elif k in saml_mapping:
             res.append({"name": saml_mapping[k]["saml"], "values": v if isinstance(v, list) else [v]})
     return res, 200
