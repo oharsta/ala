@@ -8,6 +8,7 @@ from flask import Blueprint, request as current_request, current_app
 from werkzeug.exceptions import Forbidden
 
 from server.blueprints.base import json_endpoint
+from server.cron import clean_users
 from server.db.service_provider import ServiceProvider
 from server.db.user import User
 
@@ -72,3 +73,11 @@ def attribute_aggregation():
         elif k in saml_mapping:
             res.append({"name": saml_mapping[k]["saml"], "values": v if isinstance(v, list) else [v]})
     return res, 200
+
+
+@attribute_aggregation_blueprint.route("/cleanup", methods=["POST"], strict_slashes=False)
+@json_endpoint
+def cleanup():
+    _basic_auth()
+    clean_users(current_app)
+    return {"status": "ok"}, 201

@@ -1,8 +1,9 @@
 from base64 import b64encode
 
+from server.db.user import User
 from server.test.abstract_test import AbstractTest
 from server.test.seed import john_eduperson_principal_name, sp_entity_id, john_edu_unique_id, \
-    mary_eduperson_principal_name
+    mary_eduperson_principal_name, admin_eduperson_principal_name
 
 BASIC_AUTH_HEADER = {"Authorization": f"Basic {b64encode(b'admin:secret').decode('ascii')}"}
 
@@ -56,3 +57,12 @@ class TestAttributeAggregation(AbstractTest):
 
     def test_attribute_aggregation_missing_parameter(self):
         self.get("/attribute_aggregation", response_status_code=400, headers=BASIC_AUTH_HEADER)
+
+    def test_cleanup(self):
+        user = User.find_by_eduperson_principal_name(admin_eduperson_principal_name)
+        self.assertTrue("given_name" in user)
+
+        self.post("/attribute_aggregation/cleanup", headers=BASIC_AUTH_HEADER)
+
+        user = User.find_by_eduperson_principal_name(admin_eduperson_principal_name)
+        self.assertTrue("given_name" not in user)
