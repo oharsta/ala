@@ -14,6 +14,10 @@ class User:
         return current_app.mongo.db.users.find({"expiry_date": {'$lt': date_time}})
 
     @staticmethod
+    def find_all():
+        return current_app.mongo.db.users.find({})
+
+    @staticmethod
     def save_or_update(model, _id=None, return_data=True):
         users = current_app.mongo.db.users
         if "_id" in model:

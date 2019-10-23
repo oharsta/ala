@@ -79,5 +79,5 @@ def attribute_aggregation():
 @json_endpoint
 def cleanup():
     _basic_auth()
-    clean_users(current_app)
+    clean_users(current_app, force=True)
     return {"status": "ok"}, 201

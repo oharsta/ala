@@ -10,9 +10,9 @@ from server.db.user import User
 preserved_attribute_names = ["eduperson_entitlement", "eduperson_principal_name", "eduperson_unique_id_per_sp"]
 
 
-def clean_users(app):
+def clean_users(app, force=False):
     with app.app_context():
-        users = User.find_by_expiry_date(datetime.now())
+        users = User.find_by_expiry_date(datetime.now()) if not force else User.find_all()
         coll = current_app.mongo.db.users
         for user in users:
             model = {name: user[name] for name in preserved_attribute_names if name in user}
