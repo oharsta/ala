@@ -7,7 +7,7 @@ from flask import current_app
 
 from server.db.user import User
 
-preserved_attribute_names = ["eduperson_entitlement", "eduperson_principal_name", "eduperson_unique_id_per_sp"]
+preserved_attribute_names = ["eduperson_principal_name", "eduperson_unique_id_per_sp"]
 
 
 def clean_users(app, force=False):

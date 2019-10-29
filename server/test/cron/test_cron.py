@@ -15,6 +15,7 @@ class TestCron(AbstractTest):
 
             self.assertTrue("given_name" not in user)
             self.assertTrue("family_name" not in user)
+            self.assertTrue("eduperson_entitlement" not in user)
 
             for name in preserved_attribute_names:
                 self.assertTrue(name in user)
