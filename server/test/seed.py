@@ -1,3 +1,4 @@
+import hashlib
 from datetime import datetime, timedelta
 from uuid import uuid4
 
@@ -14,6 +15,7 @@ mary_edu_unique_id = str(uuid4())
 
 admin_eduperson_principal_name = "example.com:admin"
 manager_eduperson_principal_name = "example.com:manager"
+manager_sub = "123456"
 
 sp_entity_id = "http://mock-sp"
 
@@ -40,6 +42,7 @@ def seed(mongo: PyMongo):
 
     User.save_or_update({"eduperson_principal_name": admin_eduperson_principal_name,
                          "eduperson_entitlement": "urn:mace:eduid.nl:entitlement:verified-by-institution",
+                         "sub_hash": str(uuid4()),
                          "given_name": "Peter",
                          "family_name": "Doe",
                          "eduperson_unique_id_per_sp": {service_provider["_id"]: str(uuid4())},
@@ -48,6 +51,7 @@ def seed(mongo: PyMongo):
     User.save_or_update({"eduperson_principal_name": manager_eduperson_principal_name,
                          "eduperson_entitlement": "urn:mace:eduid.nl:entitlement:verified-by-institution",
                          "given_name": "Steven",
+                         "sub_hash": hashlib.sha256(bytes(manager_sub, "utf-8")).hexdigest(),
                          "family_name": "Doe",
                          "eduperson_unique_id_per_sp": {service_provider["_id"]: str(uuid4())},
                          "expiry_date": datetime.now() - timedelta(minutes=60)})

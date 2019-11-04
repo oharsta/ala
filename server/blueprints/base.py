@@ -1,18 +1,19 @@
+import hashlib
 import logging
 import os
-from functools import wraps
 from datetime import datetime, timedelta
+from functools import wraps
+
 from flask import Blueprint, jsonify, current_app, render_template, redirect, session, \
     request
-from werkzeug.exceptions import HTTPException, BadRequest
+from werkzeug.exceptions import HTTPException
 
 from server.db.user import User
 from server.oidc import oidc
 
 base_blueprint = Blueprint("base_blueprint", __name__, url_prefix="/")
 
-protected_properties = ["eduperson_principal_name", "eduperson_entitlement", "eduperson_unique_id_per_sp",
-                        "eduid"]
+protected_properties = ["eduperson_principal_name", "eduperson_entitlement", "eduperson_unique_id_per_sp", "sub_hash"]
 
 
 def json_endpoint(f):
@@ -42,7 +43,7 @@ def index():
 
     profile = request.args.get("profile", "edubadges")
     if profile not in current_app.app_config.profile:
-        return render_template("error.html", **{"error": f"Unknown profile '{profile}'."})
+        return redirect(f"{redirect_uri}?error=unknown_profile_{profile}")
 
     session["redirect_uri"] = redirect_uri
     session["profile"] = profile
@@ -66,20 +67,23 @@ def connect():
     missing_attributes = [k for k in required_attributes if k not in conext]
 
     if len(missing_attributes) > 0:
-        return render_template("error.html",
-                               **{"error": f"Your institution has not provided all the required attributes. Missing "
-                                           f"attributes: '{','.join(missing_attributes)}'."})
-
-    if "eduperson_principal_name" not in guest:
-        raise BadRequest(f"Guest user {guest} did not provide 'eduperson_principal_name' attribute")
+        return redirect(f"{session['redirect_uri']}?error=required_attribues_missing_{'_'.join(missing_attributes)}")
 
     user = User.find_by_eduperson_principal_name(guest["eduperson_principal_name"])
     if not user:
-        raise BadRequest(f"User {guest['eduperson_principal_name']} does not exist")
+        return redirect(f"{session['redirect_uri']}?error=user_{guest['eduperson_principal_name']}_"
+                        f"not_provisioned_in_guest_idp")
+
+    sub_hash = hashlib.sha256(bytes(conext["sub"], "utf-8")).hexdigest()
+    pre_existing_user = User.find_by_sub_hash(sub_hash)
+    if pre_existing_user and pre_existing_user["_id"] != user["_id"]:
+        return redirect(f"{session['redirect_uri']}?error=sub_{conext['sub']}_already_linked_"
+                        f"to_{conext['schac_home_organization']}")
 
     user["eduperson_entitlement"] = "urn:mace:eduid.nl:entitlement:verified-by-institution"
     expiry_seconds = current_app.app_config.cron.expiry_duration_seconds
     user["expiry_date"] = datetime.now() + timedelta(seconds=expiry_seconds)
+    user["sub_hash"] = sub_hash
     # Copy all attributes from conext to the user - ARP values will filter upstream
     for k, v in conext.items():
         if k not in protected_properties:

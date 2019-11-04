@@ -8,8 +8,9 @@ class TestBase(AbstractTest):
         self.assertTrue("No redirect_uri was provided" in response)
 
     def test_login_with_invalid_profile(self):
-        response = self.get("/", query_data={"redirect_uri": "http://redirect", "profile": "nope"})
-        self.assertTrue("Unknown profile" in response)
+        response = self.get("/", query_data={"redirect_uri": "http://redirect", "profile": "nope"},
+                            response_status_code=302)
+        self.assertTrue("http://redirect?error=unknown_profile_nope" in response)
 
     def test_health(self):
         res = self.client.get("/health")

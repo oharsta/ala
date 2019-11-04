@@ -10,6 +10,10 @@ class User:
         return current_app.mongo.db.users.find_one({"eduperson_principal_name": eduperson_principal_name})
 
     @staticmethod
+    def find_by_sub_hash(sub_hash):
+        return current_app.mongo.db.users.find_one({"sub_hash": sub_hash})
+
+    @staticmethod
     def find_by_expiry_date(date_time):
         return current_app.mongo.db.users.find({"expiry_date": {'$lt': date_time}})
 
