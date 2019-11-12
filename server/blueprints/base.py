@@ -3,6 +3,7 @@ import logging
 import os
 from datetime import datetime, timedelta
 from functools import wraps
+import urllib.parse
 
 from flask import Blueprint, jsonify, current_app, render_template, redirect, session, \
     request
@@ -42,11 +43,16 @@ def index():
         return render_template("error.html", **{"error": "No redirect_uri was provided."})
 
     profile = request.args.get("profile", "edubadges")
+
     if profile not in current_app.app_config.profile:
         return redirect(f"{redirect_uri}?error=unknown_profile_{profile}")
 
     session["redirect_uri"] = redirect_uri
     session["profile"] = profile
+    state = request.args.get("state")
+    if state:
+        session["state"] = state
+
     return redirect("/login")
 
 
@@ -94,7 +100,11 @@ def connect():
 
     User.save_or_update(user)
 
-    return redirect(session["redirect_uri"])
+    uri = session["redirect_uri"]
+    state = session["state"]
+
+    uri = f"{uri}?state={urllib.parse.quote(state)}" if state else uri
+    return redirect(uri)
 
 
 @base_blueprint.route("/health", strict_slashes=False)

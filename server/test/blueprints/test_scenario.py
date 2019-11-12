@@ -1,20 +1,21 @@
 import json
+from datetime import datetime
 from urllib import parse
 from uuid import uuid4
-from datetime import datetime
+
 import httpretty
 import requests
 
 from server.db.user import User
 from server.test.abstract_test import AbstractTest
-from server.test.seed import mary_eduperson_principal_name, manager_eduperson_principal_name, manager_sub
+from server.test.seed import mary_eduperson_principal_name, manager_sub
 
 
 class TestScenario(AbstractTest):
 
     @httpretty.activate
     def test_entire_flow_happy_flow(self):
-        self._login()
+        self._login(use_state=True)
 
         user = User.find_by_eduperson_principal_name(mary_eduperson_principal_name)
         self.assertEqual("urn:mace:eduid.nl:entitlement:verified-by-institution", user["eduperson_entitlement"])
@@ -39,9 +40,12 @@ class TestScenario(AbstractTest):
         self.assertEqual("http://redirect?error=sub_123456_already_linked_to_example.com", response.location)
 
     def _login(self, path="/login", eduperson_principal_name=mary_eduperson_principal_name,
-               redirect_uri="http://redirect", profile="edubadges", conext_sub=str(uuid4())):
+               redirect_uri="http://redirect", profile="edubadges", conext_sub=str(uuid4()), use_state=False):
         with requests.Session():
-            self.client.get("/", query_string={"redirect_uri": redirect_uri, "profile": profile})
+            query_string = {"redirect_uri": redirect_uri, "profile": profile}
+            if use_state:
+                query_string["state"] = json.dumps({"key": "value"})
+            self.client.get("/", query_string=query_string)
 
             response = self.client.get(path)
 
@@ -85,5 +89,8 @@ class TestScenario(AbstractTest):
             if response.status_code == 302:
                 location = response.location
                 self.assertTrue(location.startswith("http://redirect"))
+                if use_state:
+                    query_params = dict(parse.parse_qsl(parse.urlsplit(location).query))
+                    self.assertEqual("value", json.loads(query_params["state"])["key"])
 
             return response
