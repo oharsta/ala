@@ -101,7 +101,7 @@ def connect():
     User.save_or_update(user)
 
     uri = session["redirect_uri"]
-    state = session["state"]
+    state = session.get("state")
 
     uri = f"{uri}?state={urllib.parse.quote(state)}" if state else uri
     return redirect(uri)
