@@ -13,7 +13,6 @@ from server.blueprints.base import base_blueprint
 from server.cron import init_scheduling
 from server.db.custom_migration_manager import CustomMigrationManager
 from server.oidc import configure_oidc
-from server.security import configure_basic_auth
 
 
 def read_file(file_name):
@@ -68,8 +67,6 @@ app.config.update({
 app.app_config = config
 
 configure_oidc(app, f"{os.path.dirname(os.path.realpath(__file__))}/config/{config.idp_oidc_json}")
-
-configure_basic_auth(app)
 
 app.mongo = PyMongo(app)
 
