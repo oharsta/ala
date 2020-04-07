@@ -1,10 +1,12 @@
 import base64
 import json
+import logging
 from functools import wraps
 from urllib.parse import urlencode
 
 import requests
 from flask import request, session, redirect
+from werkzeug.exceptions import Forbidden
 
 
 class OpenIDConnectClients(object):
@@ -66,6 +68,11 @@ class OpenIDConnectClients(object):
                      "redirect_uri": self.open_id_providers["redirect_uri"],
                      "grant_type": "authorization_code"}
         res = requests.post(self.open_id_providers["token_endpoint"], post_data).json()
+        if "access_token" not in res:
+            logger = logging.getLogger("main")
+            logger.error(f"Error response: {str(res)} after post")
+            raise Forbidden(description=str(res))
+
         post_data = {"access_token": res["access_token"]}
         user_info = requests.post(self.open_id_providers["userinfo_endpoint"], post_data).json()
         session[provider_name] = user_info
